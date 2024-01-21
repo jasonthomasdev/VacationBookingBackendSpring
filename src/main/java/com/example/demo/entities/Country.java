@@ -1,21 +1,22 @@
 package com.example.demo.entities;
 
-import lombok.Data;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
+import jakarta.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
+@Table(name = "countries")
 @Getter
 @Setter
 public class Country {
     @Id
+    @Column(name = "country_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "country")
     private String country_name;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -26,5 +27,4 @@ public class Country {
 
     @OneToMany(mappedBy = "country")
     private Set<Division> divisions;
-
 }

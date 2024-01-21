@@ -9,17 +9,26 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
+@Table(name = "customers")
 @Getter
 @Setter
 public class Customer {
     @Id
+    @Column(name = "customer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "customer_first_name")
     private String firstName;
+
+    @Column(name = "customer_last_name")
     private String lastName;
+
     private String address;
+
+    @Column(name = "postal_code")
     private String postal_code;
+
     private String phone;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -34,5 +43,4 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
     private Set<Cart> carts;
-
 }
