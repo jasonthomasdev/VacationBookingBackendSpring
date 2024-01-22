@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
@@ -8,8 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "cart_items")
-@Getter
-@Setter
+@Data
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,4 +36,5 @@ public class CartItem {
             inverseJoinColumns = @JoinColumn(name = "excursion_id")
     )
     private Set<Excursion> excursions;
+
 }

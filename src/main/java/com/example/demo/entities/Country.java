@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
@@ -8,8 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "countries")
-@Getter
-@Setter
+@Data
 public class Country {
     @Id
     @Column(name = "country_id")

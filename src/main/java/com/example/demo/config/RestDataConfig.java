@@ -4,6 +4,7 @@ import com.example.demo.entities.*;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 /**
@@ -32,6 +33,7 @@ public class RestDataConfig implements RepositoryRestConfigurer {
      * @param cors
      */
     @Override
+    @CrossOrigin
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         config.exposeIdsFor(Country.class);
         config.exposeIdsFor(Customer.class);
@@ -43,7 +45,7 @@ public class RestDataConfig implements RepositoryRestConfigurer {
 
         // CORS configuration
         cors.addMapping("/**") // Apply CORS settings to all paths
-                .allowedOrigins("http://localhost:4200")
+                .allowedOrigins("http://localhost:4200", "http://localhost:8080")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
