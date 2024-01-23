@@ -36,4 +36,6 @@ public class Vacation {
 
     @OneToMany(mappedBy = "vacation")
     private Set<Excursion> excursions;
+
+    public Vacation(){}
 }

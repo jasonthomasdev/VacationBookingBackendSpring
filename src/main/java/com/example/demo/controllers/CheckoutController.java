@@ -18,9 +18,9 @@ public class CheckoutController {
 
     @PostMapping("/purchase")
     public PurchaseResponse placeOrder(@RequestBody Purchase purchase) {
-
         PurchaseResponse purchaseResponse = checkoutService.placeOrder(purchase);
-
+        System.out.println("orderTrackingNumber at /purchase: " + purchaseResponse.getOrderTrackingNumber());
         return purchaseResponse;
     }
+
 }

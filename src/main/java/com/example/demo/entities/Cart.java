@@ -1,8 +1,6 @@
 package com.example.demo.entities;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -12,6 +10,8 @@ import java.util.Set;
 @Entity
 @Table(name = "carts")
 @Data
+@EqualsAndHashCode(exclude = {"customer", "cartItems"})
+@ToString(exclude = {"customer", "cartItems"})
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +41,8 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart")
     private Set<CartItem> cartItems;
+
+    public Cart(){}
 
     public void add(CartItem item) {
 

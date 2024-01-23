@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "divisions")
-@Data
+@Getter
+@Setter
 public class Division {
     @Id
     @Column(name = "division_id")
@@ -31,4 +33,17 @@ public class Division {
 
     @OneToMany(mappedBy = "division")
     private Set<Customer> customers;
+
+    public void addCustomer(Customer customer) {
+        if (customers == null) {
+            customers = new HashSet<>();
+        }
+        customers.add(customer);
+        customer.setDivision(this);
+    }
+
+    public Division(){}
+
+    public Division(String division_name, Country country){};
+
 }

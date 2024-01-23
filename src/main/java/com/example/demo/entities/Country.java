@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "countries")
-@Data
+@Getter
+@Setter
 public class Country {
     @Id
     @Column(name = "country_id")
@@ -27,4 +29,9 @@ public class Country {
 
     @OneToMany(mappedBy = "country")
     private Set<Division> divisions;
+
+    public Country(){}
+
+    public Country(String country_name){}
+
 }

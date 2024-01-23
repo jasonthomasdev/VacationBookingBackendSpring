@@ -10,7 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "excursions")
-@Data
+@Getter
+@Setter
 public class Excursion {
     @Id
     @Column(name = "excursion_id")
@@ -32,10 +33,12 @@ public class Excursion {
     @Temporal(TemporalType.TIMESTAMP)
     private Date last_update;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vacation_id")
     private Vacation vacation;
 
     @ManyToMany(mappedBy = "excursions")
     private Set<CartItem> cartItems;
+
+    public Excursion(){}
 }
