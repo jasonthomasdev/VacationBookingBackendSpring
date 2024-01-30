@@ -1,6 +1,6 @@
 package com.example.demo.services;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
+import com.example.demo.dao.CartRepository;
 import com.example.demo.dao.CustomerRepository;
 import com.example.demo.dto.Purchase;
 import com.example.demo.dto.PurchaseResponse;
@@ -8,59 +8,75 @@ import com.example.demo.entities.Cart;
 import com.example.demo.entities.CartItem;
 import com.example.demo.entities.Customer;
 import com.example.demo.entities.StatusType;
-import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
 import java.util.UUID;
+import java.math.BigDecimal;
+import java.util.Set;
 
 @Service
-public class CheckoutServiceImpl implements CheckoutService{
-
+public class CheckoutServiceImpl implements CheckoutService {
     private CustomerRepository customerRepository;
+    private CartRepository cartRepository;
 
-    public CheckoutServiceImpl(CustomerRepository customerRepository) {
+    @Autowired // This annotation is not necessary when there is only one constructor, but added for clarity
+    public CheckoutServiceImpl(CustomerRepository customerRepository, CartRepository cartRepository) {
         this.customerRepository = customerRepository;
+        this.cartRepository = cartRepository;
     }
 
     @Override
     @Transactional
     public PurchaseResponse placeOrder(Purchase purchase) {
+        if (purchase.getCart() == null) {
+            throw new IllegalArgumentException("Cart cannot be null");
+        }
 
-        // retrieve the cart info from dto
         Cart cart = purchase.getCart();
-
-        // generate tracking number
+        System.out.println("Party Size in Service: " + cart.getPartySize());
+        System.out.println("Package Price in Service: " + cart.getPackagePrice());
         String orderTrackingNumber = generateOrderTrackingNumber();
         cart.setOrderTrackingNumber(orderTrackingNumber);
 
-        // populate cart with cartItems
+        Integer partySize = purchase.getPartySize();
+        BigDecimal packagePrice = purchase.getPackagePrice();
+
+
+
+        // DEBUG
+        // purchase.setPartySize(555);
+        System.out.println("purchase.getPartySize(): " + partySize);
+
         Set<CartItem> cartItems = purchase.getCartItems();
         cartItems.forEach(item -> cart.add(item));
 
-        // populate cart with cartItems and customer
         cart.setCartItems(purchase.getCartItems());
         cart.setCustomer(purchase.getCustomer());
+        // cart.setCreate_date(purchase.getCart().getCreate_date());
+        // cart.setLast_update(purchase.getCart().getLast_update());
+        // cart.setPartySize(purchase.getPartySize());
+        // cart.setPackagePrice(purchase.getPackagePrice());
 
-        // set cart status to 'ordered' BEFORE saving
         cart.setStatus(StatusType.ordered);
 
-        // populate customer with cart
+        // Save cart to cartRepository
+        cartRepository.save(cart);
+
         Customer customer = purchase.getCustomer();
         customer.add(cart);
 
-        // save to the database
+        // Uncomment for debugging purposes
+        System.out.println("Party Size: " + cart.getPartySize());
+        // System.out.println("Package Price: " + cart.getPackagePrice());
+
         customerRepository.save(customer);
 
-        // return a response
         return new PurchaseResponse(orderTrackingNumber);
     }
 
     private String generateOrderTrackingNumber() {
-
-        // generate a random UUID number (UUID version-4)
-
         return UUID.randomUUID().toString();
-
     }
 }

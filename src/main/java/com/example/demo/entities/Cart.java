@@ -1,15 +1,20 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "carts")
-@Data
 @EqualsAndHashCode(exclude = {"customer", "cartItems"})
 @ToString(exclude = {"customer", "cartItems"})
 public class Cart {
@@ -18,9 +23,11 @@ public class Cart {
     private Long cart_id;
 
     @Column(name = "package_price")
+    @JsonProperty("package_price")
     private BigDecimal packagePrice;
 
     @Column(name = "party_size")
+    @JsonProperty("party_size")
     private Integer partySize;
 
     @Enumerated(EnumType.STRING)
@@ -29,17 +36,25 @@ public class Cart {
     @Column(name = "order_tracking_number")
     private String orderTrackingNumber;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    @Column(name = "create_date", updatable = false)
     private Date create_date;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    // @Temporal(TemporalType.TIMESTAMP)
+    // private Date create_date;
+
+    @UpdateTimestamp
+    @Column(name = "last_update")
     private Date last_update;
+
+    // @Temporal(TemporalType.TIMESTAMP)
+    // private Date last_update;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private Set<CartItem> cartItems;
 
     public Cart(){}

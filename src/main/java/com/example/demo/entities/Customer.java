@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -34,11 +36,19 @@ public class Customer {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    @Column(name = "create_date", updatable = false)
     private Date create_date;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    // @Temporal(TemporalType.TIMESTAMP)
+    // private Date create_date;
+
+    @UpdateTimestamp
+    @Column(name = "last_update")
     private Date last_update;
+
+    // @Temporal(TemporalType.TIMESTAMP)
+    // private Date last_update;
 
     @ManyToOne
     @JoinColumn(name = "division_id")
