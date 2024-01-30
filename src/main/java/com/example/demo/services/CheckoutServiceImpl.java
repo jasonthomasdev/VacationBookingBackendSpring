@@ -30,16 +30,35 @@ public class CheckoutServiceImpl implements CheckoutService {
     @Override
     @Transactional
     public PurchaseResponse placeOrder(Purchase purchase) {
+
+        String orderTrackingNumber;
+
+        /*
         if (purchase.getCart() == null) {
             throw new IllegalArgumentException("Cart cannot be null");
         }
-
+        */
         Cart cart = purchase.getCart();
         System.out.println("Party Size in Service: " + cart.getPartySize());
         System.out.println("Package Price in Service: " + cart.getPackagePrice());
-        String orderTrackingNumber = generateOrderTrackingNumber();
+
+        System.out.println("DEBUG -  orderTrackingnumber before: " + cart.getOrderTrackingNumber());
+        // Check if the cart is empty
+        if (cart.getPackagePrice().intValue() == 0) {
+            orderTrackingNumber = "Cart is empty. Purchase cancelled.";
+            System.out.println("DEBUG - Caught in the IF STATEMENT");
+        } else {
+            orderTrackingNumber = generateOrderTrackingNumber();
+            System.out.println("DEBUG - Caught in the ELSE STATEMENT");
+        }
+
+        // DEBUG
+        System.out.println("cart.getCartItems() = " + cart.getCartItems());
+        // System.out.println("cart.getCartItems().isEmpty() = " + cart.getCartItems().isEmpty());
+
         cart.setOrderTrackingNumber(orderTrackingNumber);
 
+        System.out.println("DEBUG -  orderTrackingnumber after: " + cart.getOrderTrackingNumber());
         Integer partySize = purchase.getPartySize();
         BigDecimal packagePrice = purchase.getPackagePrice();
 
@@ -47,7 +66,7 @@ public class CheckoutServiceImpl implements CheckoutService {
 
         // DEBUG
         // purchase.setPartySize(555);
-        System.out.println("purchase.getPartySize(): " + partySize);
+        // System.out.println("purchase.getPartySize(): " + partySize);
 
         Set<CartItem> cartItems = purchase.getCartItems();
         cartItems.forEach(item -> cart.add(item));
