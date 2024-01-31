@@ -86,8 +86,8 @@ public class CheckoutServiceImpl implements CheckoutService {
         Customer customer = purchase.getCustomer();
         customer.add(cart);
 
-        // Uncomment for debugging purposes
-        System.out.println("Party Size: " + cart.getPartySize());
+        // DEBUG
+        // System.out.println("Party Size: " + cart.getPartySize());
         // System.out.println("Package Price: " + cart.getPackagePrice());
 
         customerRepository.save(customer);

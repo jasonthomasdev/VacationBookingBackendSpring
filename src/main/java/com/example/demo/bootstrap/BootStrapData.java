@@ -33,10 +33,12 @@ public class BootStrapData implements CommandLineRunner {
         Country usa = new Country("USA");
         countryRepository.save(usa);
         countryRepository.flush();
-
+/*
         Division virginia = new Division("Virginia", usa);
         virginia.setCountry(usa);
         divisionRepository.save(virginia);
+*/
+        Division virginia = divisionRepository.findById(45L).orElse(null);
 
         Customer michaelJordan = new Customer("Michael", "Jordan", "111 Main St", "11111", "1121121122", virginia);
         virginia.addCustomer(michaelJordan);
